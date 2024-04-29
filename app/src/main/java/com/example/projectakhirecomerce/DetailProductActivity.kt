@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -77,6 +78,19 @@ class DetailProductActivity : AppCompatActivity() {
         val btnAddToCart: LinearLayout = findViewById(R.id.btn_addToCart)
         val btnShare:ShapeableImageView = findViewById(R.id.btn_share)
 
+        // Inisialisasi views untuk ukuran pakaian
+        val sizeClothesS = findViewById<LinearLayout>(R.id.sizeClothes_S)
+        val sizeClothesM = findViewById<LinearLayout>(R.id.sizeClothes_M)
+        val sizeClothesL = findViewById<LinearLayout>(R.id.sizeClothes_L)
+        val sizeClothesXL = findViewById<LinearLayout>(R.id.sizeClothes_XL)
+        val sizeClothesXXL = findViewById<LinearLayout>(R.id.sizeClothes_XXL)
+
+        // Inisialisasi views untuk ukuran sepatu
+        val sizeShoes39 = findViewById<LinearLayout>(R.id.sizeShoes_39)
+        val sizeShoes40 = findViewById<LinearLayout>(R.id.sizeShoes_40)
+        val sizeShoes41 = findViewById<LinearLayout>(R.id.sizeShoes_41)
+        val sizeShoes42 = findViewById<LinearLayout>(R.id.sizeShoes_42)
+
         sizeClothes = findViewById(R.id.size_clothes)
         sizeShoes = findViewById(R.id.size_shoes)
 
@@ -130,6 +144,19 @@ class DetailProductActivity : AppCompatActivity() {
                 updateQuantityAndPrice()
             }
         }
+
+        // Set listener untuk ukuran pakaian
+        setSizeClickListener(sizeClothesS)
+        setSizeClickListener(sizeClothesM)
+        setSizeClickListener(sizeClothesL)
+        setSizeClickListener(sizeClothesXL)
+        setSizeClickListener(sizeClothesXXL)
+
+        // Set listener untuk ukuran sepatu
+        setSizeClickListener(sizeShoes39)
+        setSizeClickListener(sizeShoes40)
+        setSizeClickListener(sizeShoes41)
+        setSizeClickListener(sizeShoes42)
 
         btnAddToCart.setOnClickListener{
             val subTotal = quantity * pricePerItem
@@ -205,5 +232,29 @@ class DetailProductActivity : AppCompatActivity() {
     private fun updateTotalPrice() {
         val totalPrice = pricePerItem * quantity
         totalPriceText.text = String.format("$%.2f", totalPrice)
+    }
+
+    private fun setSizeClickListener(sizeLayout: LinearLayout) {
+        sizeLayout.setOnClickListener {
+            resetAllSizes()
+            sizeLayout.setBackgroundResource(R.drawable.border_active)
+            val textView = sizeLayout.getChildAt(0) as TextView
+            textView.setTextColor(ContextCompat.getColor(this, R.color.white))
+        }
+    }
+
+    private fun resetAllSizes() {
+        val sizes = listOf(
+            R.id.sizeClothes_S, R.id.sizeClothes_M, R.id.sizeClothes_L,
+            R.id.sizeClothes_XL, R.id.sizeClothes_XXL,
+            R.id.sizeShoes_39, R.id.sizeShoes_40, R.id.sizeShoes_41, R.id.sizeShoes_42
+        )
+
+        for (size in sizes) {
+            val sizeLayout = findViewById<LinearLayout>(size)
+            sizeLayout.setBackgroundResource(R.drawable.border)
+            val textView = sizeLayout.getChildAt(0) as TextView
+            textView.setTextColor(ContextCompat.getColor(this, R.color.gray))
+        }
     }
 }
