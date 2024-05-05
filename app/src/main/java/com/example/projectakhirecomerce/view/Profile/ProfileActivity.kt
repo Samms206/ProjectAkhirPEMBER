@@ -29,6 +29,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private var userId: Int = -1
     private var userEmail: String = "Sams"
+    private var userPass: String = "123"
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,9 +44,13 @@ class ProfileActivity : AppCompatActivity() {
         val emailEditText = findViewById<EditText>(R.id.tf_username_pr)
         val passwordEditText = findViewById<EditText>(R.id.tf_password_pr)
 
+        emailEditText.setText(userEmail)
+        passwordEditText.setText(userPass)
+
         val extras = intent.extras
         userId = extras?.getInt("id", -1) ?: -1
         userEmail = extras?.getString("email", "Sams") ?: "Sams"
+        userPass = extras?.getString("password", "123") ?: "123"
 
         val repository = DependencyInjection.provideUserRepository(this)
         userViewModel = ViewModelProvider(this, UserViewModelFactory(repository))
@@ -111,6 +116,7 @@ class ProfileActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java).apply {
             putExtra("id", userId)
             putExtra("email", userEmail)
+            putExtra("password", userPass)
         }
         startActivity(intent)
     }

@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
     private var userId: Int = -1
     private var userEmail: String = "Sams"
+    private var userPass: String = "123"
 
     private var currentActiveCategory: RelativeLayout? = null
 
@@ -61,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         val extras = intent.extras
         userId = extras?.getInt("id", -1) ?: -1
         userEmail = extras?.getString("email", "Sams") ?: "Sams"
+        userPass = extras?.getString("password", "123") ?: "123"
         txthai = findViewById(R.id.txt_hai)
         val nameOnly = userEmail.substringBefore("@")
         txthai.text = "Hai $nameOnly 👋"
@@ -130,6 +132,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, CartActivity::class.java).apply {
                 putExtra("id", userId)
                 putExtra("email", userEmail)
+                putExtra("password", userPass)
             }
             startActivity(intent)
         }
@@ -139,6 +142,7 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ProfileActivity::class.java).apply {
                 putExtra("id", userId)
                 putExtra("email", userEmail)
+                putExtra("password", userPass)
             }
             startActivity(intent)
         }

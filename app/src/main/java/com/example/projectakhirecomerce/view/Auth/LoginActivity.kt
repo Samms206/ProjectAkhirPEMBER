@@ -52,6 +52,7 @@ class LoginActivity : AppCompatActivity() {
                     Intent(this, MainActivity::class.java).also {
                         it.putExtra("id", user.id)
                         it.putExtra("email", user.email)
+                        it.putExtra("password", user.password)
                         startActivity(it)
                     }
                 } else {

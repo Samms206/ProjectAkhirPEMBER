@@ -23,6 +23,7 @@ class CartActivity : AppCompatActivity() {
 
     private var userId: Int = -1
     private var userEmail: String = "Sams"
+    private var userPass: String = "123"
 
     private lateinit var cartViewModel: CartViewModel
     private lateinit var recyclerView: RecyclerView
@@ -42,6 +43,7 @@ class CartActivity : AppCompatActivity() {
         val extras = intent.extras
         userId = extras?.getInt("id", -1) ?: -1
         userEmail = extras?.getString("email", "Sams") ?: "Sams"
+        userPass = extras?.getString("password", "123") ?: "123"
 
         val factory = CartViewModelFactory.getInstance(this)
         cartViewModel = ViewModelProvider(this, factory)[CartViewModel::class.java]
@@ -66,6 +68,7 @@ class CartActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java).apply {
             putExtra("id", userId)
             putExtra("email", userEmail)
+            putExtra("password", userPass)
         }
         startActivity(intent)
     }
