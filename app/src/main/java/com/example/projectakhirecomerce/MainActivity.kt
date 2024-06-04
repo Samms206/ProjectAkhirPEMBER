@@ -36,22 +36,6 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        // Initialize category views
-        val categoryAll: RelativeLayout = findViewById(R.id.category_all)
-        val categoryClothes: RelativeLayout = findViewById(R.id.category_clothes)
-        val categoryShoes: RelativeLayout = findViewById(R.id.category_shoes)
-        val categoryBags: RelativeLayout = findViewById(R.id.category_bags)
-        val categoryElectronics: RelativeLayout = findViewById(R.id.category_electronics)
-
-        // Set click listeners
-        setCategoryClickListener(categoryAll)
-        setCategoryClickListener(categoryClothes)
-        setCategoryClickListener(categoryShoes)
-        setCategoryClickListener(categoryBags)
-        setCategoryClickListener(categoryElectronics)
-
-        // Set the default active category
-        setActiveCategory(categoryAll)
 
         //Show Product
         recyclerView = findViewById(R.id.rv_product)
@@ -63,28 +47,48 @@ class MainActivity : AppCompatActivity() {
         val factory = ProductViewModelFactory(repository)
         productViewModel = ViewModelProvider(this, factory).get(ProductViewModel::class.java)
 
-        productViewModel.getProducts().observe(this) { response ->
+        productViewModel.products.observe(this) { response ->
             when (response) {
                 is ApiResponse.Success -> {
                     productAdapter.setProductList(response.data)
                 }
                 is ApiResponse.Error -> {
-                    // Handle the error
                     val errorMessage = response.message
-                    // You can display the error message to the user
+                }
+                is ApiResponse.Loading -> {
+                    // Show loading indicator
                 }
             }
         }
 
+        // Initialize category views
+        val categoryAll: RelativeLayout = findViewById(R.id.category_all)
+        val categoryClothes: RelativeLayout = findViewById(R.id.category_clothes)
+        val categoryShoes: RelativeLayout = findViewById(R.id.category_shoes)
+        val categoryBags: RelativeLayout = findViewById(R.id.category_bags)
+        val categoryElectronics: RelativeLayout = findViewById(R.id.category_electronics)
+
+        // Set click listeners
+        setCategoryClickListener(categoryAll, "All")
+        setCategoryClickListener(categoryClothes, "Clothes")
+        setCategoryClickListener(categoryShoes, "Shoes")
+        setCategoryClickListener(categoryBags, "Bags")
+        setCategoryClickListener(categoryElectronics, "Electronics")
+
+        // Set the default active category
+        setActiveCategory(categoryAll, "All")
+
+        // Load initial data
+        productViewModel.getProducts()
     }
 
-    private fun setCategoryClickListener(category: RelativeLayout) {
+    private fun setCategoryClickListener(category: RelativeLayout, categoryName: String) {
         category.setOnClickListener {
-            setActiveCategory(category)
+            setActiveCategory(category, categoryName)
         }
     }
 
-    private fun setActiveCategory(category: RelativeLayout) {
+    private fun setActiveCategory(category: RelativeLayout, categoryName: String) {
         currentActiveCategory?.let {
             // Reset previous active category
             it.setBackgroundResource(R.drawable.border)
@@ -97,5 +101,12 @@ class MainActivity : AppCompatActivity() {
         val currentText = category.getChildAt(0) as TextView
         currentText.setTextColor(Color.WHITE)
         currentActiveCategory = category
+
+        // Fetch products based on the selected category
+        if (categoryName == "All") {
+            productViewModel.getProducts()
+        } else {
+            productViewModel.getProductsByCategory(categoryName)
+        }
     }
 }
