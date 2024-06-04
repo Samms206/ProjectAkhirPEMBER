@@ -2,16 +2,30 @@ package com.example.projectakhirecomerce
 
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.GridLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.projectakhirecomerce.api.ApiResponse
+import com.example.projectakhirecomerce.repository.ProductRepository
+import com.example.projectakhirecomerce.view.ProductAdapter
+import com.example.projectakhirecomerce.viewmodel.ProductViewModel
+import com.example.projectakhirecomerce.viewmodel.ProductViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
     private var currentActiveCategory: RelativeLayout? = null
+
+    private lateinit var productViewModel: ProductViewModel
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var productAdapter: ProductAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +52,30 @@ class MainActivity : AppCompatActivity() {
 
         // Set the default active category
         setActiveCategory(categoryAll)
+
+        //Show Product
+        recyclerView = findViewById(R.id.rv_product)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        productAdapter = ProductAdapter(emptyList())
+        recyclerView.adapter = productAdapter
+
+        val repository = ProductRepository()
+        val factory = ProductViewModelFactory(repository)
+        productViewModel = ViewModelProvider(this, factory).get(ProductViewModel::class.java)
+
+        productViewModel.getProducts().observe(this) { response ->
+            when (response) {
+                is ApiResponse.Success -> {
+                    productAdapter.setProductList(response.data)
+                }
+                is ApiResponse.Error -> {
+                    // Handle the error
+                    val errorMessage = response.message
+                    // You can display the error message to the user
+                }
+            }
+        }
+
     }
 
     private fun setCategoryClickListener(category: RelativeLayout) {
