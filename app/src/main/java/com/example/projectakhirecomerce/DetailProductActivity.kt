@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,18 @@ import com.bumptech.glide.Glide
 import com.google.android.material.imageview.ShapeableImageView
 
 class DetailProductActivity : AppCompatActivity() {
+    private lateinit var decreaseButton: TextView
+    private lateinit var increaseButton: TextView
+    private lateinit var quantityText: TextView
+    private lateinit var totalPriceText: TextView
+    private lateinit var sizeClothes: LinearLayout
+    private lateinit var sizeShoes: LinearLayout
+
+    private var quantity = 1
+    private var pricePerItem = 0.0 // Update to be mutable
+    private val minQuantity = 1
+    private val maxQuantity = 10
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +38,8 @@ class DetailProductActivity : AppCompatActivity() {
         }
         val productName = intent.getStringExtra("PRODUCT_NAME")
         val productShop = intent.getStringExtra("PRODUCT_SHOP")
-        val productPrice = intent.getStringExtra("PRODUCT_PRICE")
+        val productCategory = intent.getStringExtra("PRODUCT_CATEGORY") ?: ""
+        val productPrice = intent.getStringExtra("PRODUCT_PRICE")?.toDoubleOrNull()
         val productImg = intent.getStringExtra("PRODUCT_IMG")
         val productDescription = intent.getStringExtra("PRODUCT_DESCRIPTION")
         val productRating = intent.getStringExtra("PRODUCT_RATING")
@@ -36,6 +50,8 @@ class DetailProductActivity : AppCompatActivity() {
         val imgProduct: ShapeableImageView = findViewById(R.id.img_product_dtl)
         val txtDescription: TextView = findViewById(R.id.txt_desc_dtl)
 //        val txtRating: TextView = findViewById(R.id.txt_rating)
+        sizeClothes = findViewById(R.id.size_clothes)
+        sizeShoes = findViewById(R.id.size_shoes)
 
         txtName.text = productName
         txtShop.text = productShop
@@ -46,11 +62,62 @@ class DetailProductActivity : AppCompatActivity() {
         Glide.with(this)
             .load(productImg)
             .into(imgProduct)
+
+        decreaseButton = findViewById(R.id.decrease_button)
+        increaseButton = findViewById(R.id.increase_button)
+        quantityText = findViewById(R.id.quantity_text)
+        totalPriceText = findViewById(R.id.txt_price_dtl)
+
+        when (productCategory) {
+            "Clothes" -> {
+                sizeClothes.visibility = View.VISIBLE
+                sizeShoes.visibility = View.GONE
+            }
+            "Shoes" -> {
+                sizeClothes.visibility = View.GONE
+                sizeShoes.visibility = View.VISIBLE
+            }
+            else -> {
+                sizeClothes.visibility = View.GONE
+                sizeShoes.visibility = View.GONE
+            }
+        }
+
+        // Set the price per item if available
+        productPrice?.let {
+            pricePerItem = it
+        }
+
+        updateTotalPrice()
+
+        decreaseButton.setOnClickListener {
+            if (quantity > minQuantity) {
+                quantity--
+                updateQuantityAndPrice()
+            }
+        }
+
+        increaseButton.setOnClickListener {
+            if (quantity < maxQuantity) {
+                quantity++
+                updateQuantityAndPrice()
+            }
+        }
     }
 
     fun gotoMain(view: View) {
         Intent(this, MainActivity::class.java).also {
             startActivity(it)
         }
+    }
+
+    private fun updateQuantityAndPrice() {
+        quantityText.text = quantity.toString()
+        updateTotalPrice()
+    }
+
+    private fun updateTotalPrice() {
+        val totalPrice = pricePerItem * quantity
+        totalPriceText.text = String.format("$%.2f", totalPrice)
     }
 }

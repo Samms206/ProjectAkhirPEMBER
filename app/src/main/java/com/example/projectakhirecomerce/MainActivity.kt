@@ -3,6 +3,7 @@ package com.example.projectakhirecomerce
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.GridLayout
+import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -11,7 +12,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectakhirecomerce.api.ApiResponse
 import com.example.projectakhirecomerce.repository.ProductRepository
@@ -26,6 +26,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var productViewModel: ProductViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var productAdapter: ProductAdapter
+    //
+    private lateinit var homeIcon: ImageView
+    private lateinit var cartIcon: ImageView
+    private lateinit var notificationIcon: ImageView
+    private lateinit var profileIcon: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +72,16 @@ class MainActivity : AppCompatActivity() {
         val categoryShoes: RelativeLayout = findViewById(R.id.category_shoes)
         val categoryBags: RelativeLayout = findViewById(R.id.category_bags)
         val categoryElectronics: RelativeLayout = findViewById(R.id.category_electronics)
+        //menu
+        homeIcon = findViewById(R.id.home_icon)
+        cartIcon = findViewById(R.id.cart_icon)
+        notificationIcon = findViewById(R.id.notification_icon)
+        profileIcon = findViewById(R.id.profile_icon)
+
+        homeIcon.setOnClickListener { setActiveIcon(homeIcon) }
+        cartIcon.setOnClickListener { setActiveIcon(cartIcon) }
+        notificationIcon.setOnClickListener { setActiveIcon(notificationIcon) }
+        profileIcon.setOnClickListener { setActiveIcon(profileIcon) }
 
         // Set click listeners
         setCategoryClickListener(categoryAll, "All")
@@ -77,6 +92,7 @@ class MainActivity : AppCompatActivity() {
 
         // Set the default active category
         setActiveCategory(categoryAll, "All")
+        homeIcon.setImageResource(R.drawable.homeactive)
 
         // Load initial data
         productViewModel.getProducts()
@@ -107,6 +123,22 @@ class MainActivity : AppCompatActivity() {
             productViewModel.getProducts()
         } else {
             productViewModel.getProductsByCategory(categoryName)
+        }
+    }
+
+    private fun setActiveIcon(activeIcon: ImageView) {
+        // Reset all icons to default
+        homeIcon.setImageResource(R.drawable.home)
+        cartIcon.setImageResource(R.drawable.cartmenu)
+        notificationIcon.setImageResource(R.drawable.notification)
+        profileIcon.setImageResource(R.drawable.profile)
+
+        // Set the clicked icon to its active state
+        when (activeIcon) {
+            homeIcon -> activeIcon.setImageResource(R.drawable.homeactive)
+            cartIcon -> activeIcon.setImageResource(R.drawable.cardmenuactive)
+            notificationIcon -> activeIcon.setImageResource(R.drawable.notificationactive)
+            profileIcon -> activeIcon.setImageResource(R.drawable.profileactive)
         }
     }
 }

@@ -27,7 +27,6 @@ class ProductRepository {
                 productsLiveData.postValue(ApiResponse.Error("Failed to connect to server"))
             }
         })
-
         return productsLiveData
     }
 
@@ -43,12 +42,10 @@ class ProductRepository {
                     productsLiveData.postValue(ApiResponse.Error("Failed to get products"))
                 }
             }
-
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
                 productsLiveData.postValue(ApiResponse.Error("Failed to connect to server"))
             }
         })
-
         return productsLiveData
     }
 }

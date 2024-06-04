@@ -55,6 +55,7 @@ class ProductAdapter(private var productList: List<Product>) : RecyclerView.Adap
             val intent = Intent(holder.itemView.context, DetailProductActivity::class.java).apply {
                 putExtra("PRODUCT_NAME", product.name)
                 putExtra("PRODUCT_SHOP", product.shop)
+                putExtra("PRODUCT_CATEGORY", product.category)
                 putExtra("PRODUCT_PRICE", product.price)
                 putExtra("PRODUCT_IMG", product.img)
                 putExtra("PRODUCT_DESCRIPTION", product.description)
