@@ -1,7 +1,9 @@
 package com.example.projectakhirecomerce
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.RelativeLayout
@@ -15,6 +17,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectakhirecomerce.api.ApiResponse
 import com.example.projectakhirecomerce.repository.ProductRepository
+import com.example.projectakhirecomerce.view.Auth.LoginActivity
 import com.example.projectakhirecomerce.view.ProductAdapter
 import com.example.projectakhirecomerce.viewmodel.ProductViewModel
 import com.example.projectakhirecomerce.viewmodel.ProductViewModelFactory
@@ -81,7 +84,12 @@ class MainActivity : AppCompatActivity() {
         homeIcon.setOnClickListener { setActiveIcon(homeIcon) }
         cartIcon.setOnClickListener { setActiveIcon(cartIcon) }
         notificationIcon.setOnClickListener { setActiveIcon(notificationIcon) }
-        profileIcon.setOnClickListener { setActiveIcon(profileIcon) }
+        profileIcon.setOnClickListener {
+            setActiveIcon(profileIcon)
+            Intent(this, LoginActivity::class.java).also {
+                startActivity(it)
+            }
+        }
 
         // Set click listeners
         setCategoryClickListener(categoryAll, "All")
@@ -141,4 +149,5 @@ class MainActivity : AppCompatActivity() {
             profileIcon -> activeIcon.setImageResource(R.drawable.profileactive)
         }
     }
+
 }

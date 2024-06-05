@@ -22,7 +22,7 @@ class DetailProductActivity : AppCompatActivity() {
     private lateinit var sizeShoes: LinearLayout
 
     private var quantity = 1
-    private var pricePerItem = 0.0 // Update to be mutable
+    private var pricePerItem = 0.0
     private val minQuantity = 1
     private val maxQuantity = 10
 
