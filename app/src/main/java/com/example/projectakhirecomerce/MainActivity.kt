@@ -1,5 +1,6 @@
 package com.example.projectakhirecomerce
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -21,8 +22,12 @@ import com.example.projectakhirecomerce.view.Auth.LoginActivity
 import com.example.projectakhirecomerce.view.ProductAdapter
 import com.example.projectakhirecomerce.viewmodel.ProductViewModel
 import com.example.projectakhirecomerce.viewmodel.ProductViewModelFactory
+import org.w3c.dom.Text
 
 class MainActivity : AppCompatActivity() {
+
+    private var userId: Int = -1
+    private var userEmail: String = "Sams"
 
     private var currentActiveCategory: RelativeLayout? = null
 
@@ -34,7 +39,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var cartIcon: ImageView
     private lateinit var notificationIcon: ImageView
     private lateinit var profileIcon: ImageView
+    //
+    private lateinit var txthai: TextView
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -44,6 +52,12 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val extras = intent.extras
+        userId = extras?.getInt("id", -1) ?: -1
+        userEmail = extras?.getString("email", "Sams") ?: "Sams"
+        txthai = findViewById(R.id.txt_hai)
+        val nameOnly = userEmail.substringBefore("@")
+        txthai.text = "Hai " + nameOnly + " 👋"
 
         //Show Product
         recyclerView = findViewById(R.id.rv_product)
