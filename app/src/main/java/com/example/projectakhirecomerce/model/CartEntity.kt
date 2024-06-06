@@ -12,6 +12,9 @@ data class CartEntity(
     @ColumnInfo(name = "id")
     val id: Int = 0,
 
+    @ColumnInfo(name = "idUser")
+    val idUser: Int=0,
+
     @ColumnInfo(name = "idProduct")
     val idProduct: Int=0,
 
@@ -37,6 +40,7 @@ data class CartEntity(
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readInt(),
+        parcel.readInt(),
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
@@ -47,6 +51,7 @@ data class CartEntity(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(id)
+        parcel.writeInt(idUser)
         parcel.writeInt(idProduct)
         parcel.writeString(nameProduct)
         parcel.writeString(shopProduct)

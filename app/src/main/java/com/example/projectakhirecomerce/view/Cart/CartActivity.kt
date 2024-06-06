@@ -1,13 +1,30 @@
 package com.example.projectakhirecomerce.view.Cart
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.projectakhirecomerce.MainActivity
 import com.example.projectakhirecomerce.R
+import com.example.projectakhirecomerce.view.ProductAdapter
+import com.example.projectakhirecomerce.viewmodel.CartViewModel
+import com.example.projectakhirecomerce.viewmodel.CartViewModelFactory
+import com.example.projectakhirecomerce.viewmodel.ProductViewModel
 
 class CartActivity : AppCompatActivity() {
+
+    private lateinit var cartViewModel: CartViewModel
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var cartAdapter: CartAdapter
+
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -16,6 +33,24 @@ class CartActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        val factory = CartViewModelFactory.getInstance(this)
+        cartViewModel = ViewModelProvider(this, factory)[CartViewModel::class.java]
+        recyclerView = findViewById(R.id.rv_cart)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        cartViewModel.getAllCart().observe(this) { cartData ->
+            if (cartData != null) {
+                cartAdapter = CartAdapter(cartData) //ini
+                recyclerView.adapter = cartAdapter
+            }
+        }
+    }
+
+    fun gotoMain(view: View) {
+        Intent(this, MainActivity::class.java).also {
+            startActivity(it)
         }
     }
 }

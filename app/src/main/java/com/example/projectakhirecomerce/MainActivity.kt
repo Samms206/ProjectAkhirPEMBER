@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.projectakhirecomerce.api.ApiResponse
 import com.example.projectakhirecomerce.repository.ProductRepository
 import com.example.projectakhirecomerce.view.Auth.LoginActivity
+import com.example.projectakhirecomerce.view.Cart.CartActivity
 import com.example.projectakhirecomerce.view.ProductAdapter
 import com.example.projectakhirecomerce.viewmodel.ProductViewModel
 import com.example.projectakhirecomerce.viewmodel.ProductViewModelFactory
@@ -67,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
         val repository = ProductRepository()
         val factory = ProductViewModelFactory(repository)
-        productViewModel = ViewModelProvider(this, factory).get(ProductViewModel::class.java)
+        productViewModel = ViewModelProvider(this, factory)[ProductViewModel::class.java]
 
         productViewModel.products.observe(this) { response ->
             when (response) {
@@ -96,7 +97,12 @@ class MainActivity : AppCompatActivity() {
         profileIcon = findViewById(R.id.profile_icon)
 
         homeIcon.setOnClickListener { setActiveIcon(homeIcon) }
-        cartIcon.setOnClickListener { setActiveIcon(cartIcon) }
+        cartIcon.setOnClickListener {
+            setActiveIcon(cartIcon)
+            Intent(this, CartActivity::class.java).also {
+                startActivity(it)
+            }
+        }
         notificationIcon.setOnClickListener { setActiveIcon(notificationIcon) }
         profileIcon.setOnClickListener {
             setActiveIcon(profileIcon)
