@@ -13,10 +13,10 @@ data class CartEntity(
     val id: Int = 0,
 
     @ColumnInfo(name = "idUser")
-    val idUser: Int=0,
+    val idUser: String,
 
     @ColumnInfo(name = "idProduct")
-    val idProduct: Int=0,
+    val idProduct:String,
 
     @ColumnInfo(name = "nameProduct")
     val nameProduct: String,
@@ -28,37 +28,37 @@ data class CartEntity(
     val imgProduct: String,
 
     @ColumnInfo(name = "priceProduct")
-    val priceProduct: Int=0,
+    val priceProduct: String,
 
     @ColumnInfo(name = "qtyProduct")
-    val qtyProduct: Int=0,
+    val qtyProduct: String,
 
     @ColumnInfo(name = "subTotal")
-    val subTotal: Int=0,
+    val subTotal: String,
 
     ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
-        parcel.readInt(),
-        parcel.readInt(),
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readInt(),
-        parcel.readInt(),
-        parcel.readInt(),
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
+        parcel.readString()!!,
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(id)
-        parcel.writeInt(idUser)
-        parcel.writeInt(idProduct)
+        parcel.writeString(idUser)
+        parcel.writeString(idProduct)
         parcel.writeString(nameProduct)
         parcel.writeString(shopProduct)
         parcel.writeString(imgProduct)
-        parcel.writeInt(priceProduct)
-        parcel.writeInt(qtyProduct)
-        parcel.writeInt(subTotal)
+        parcel.writeString(priceProduct)
+        parcel.writeString(qtyProduct)
+        parcel.writeString(subTotal)
     }
 
     override fun describeContents(): Int {

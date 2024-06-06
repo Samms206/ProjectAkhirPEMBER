@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -18,7 +19,7 @@ class CartAdapter(private var cartList: List<CartEntity>) : RecyclerView.Adapter
     private var onItemClickCallback: OnItemClickCallback? = null
 
     interface OnItemClickCallback {
-        fun onItemClicked(data: Product)
+        fun onItemClicked(data: CartEntity)
     }
 
     fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
@@ -36,6 +37,7 @@ class CartAdapter(private var cartList: List<CartEntity>) : RecyclerView.Adapter
         val productPrice: TextView = itemView.findViewById(R.id.txt_price_cart)
         val productQty: TextView = itemView.findViewById(R.id.txt_qty_cart)
         val productImg: ShapeableImageView = itemView.findViewById(R.id.img_cart)
+        val btnDelete: RelativeLayout = itemView.findViewById(R.id.btnDelete)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
@@ -53,6 +55,10 @@ class CartAdapter(private var cartList: List<CartEntity>) : RecyclerView.Adapter
             .load(cart.imgProduct)
             .into(holder.productImg)
 
+        //delete
+        holder.btnDelete.setOnClickListener {
+            onItemClickCallback?.onItemClicked(cart)
+        }
     }
 
     override fun getItemCount(): Int {

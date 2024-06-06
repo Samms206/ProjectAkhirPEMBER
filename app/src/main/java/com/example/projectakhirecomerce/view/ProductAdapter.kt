@@ -15,14 +15,14 @@ import com.google.android.material.imageview.ShapeableImageView
 
 class ProductAdapter(private var productList: List<Product>) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
-    private var onItemClickCallback: OnItemClickCallback? = null
+    private var itemClickListener: OnItemClickListener? = null
 
-    interface OnItemClickCallback {
-        fun onItemClicked(data: Product)
+    interface OnItemClickListener {
+        fun onItemClicked(product: Product)
     }
 
-    fun setOnItemClickCallback(onItemClickCallback: OnItemClickCallback) {
-        this.onItemClickCallback = onItemClickCallback
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        itemClickListener = listener
     }
 
     fun setProductList(productList: List<Product>) {
@@ -52,17 +52,22 @@ class ProductAdapter(private var productList: List<Product>) : RecyclerView.Adap
             .into(holder.productImg)
 
         holder.itemView.setOnClickListener {
-            val intent = Intent(holder.itemView.context, DetailProductActivity::class.java).apply {
-                putExtra("PRODUCT_NAME", product.name)
-                putExtra("PRODUCT_SHOP", product.shop)
-                putExtra("PRODUCT_CATEGORY", product.category)
-                putExtra("PRODUCT_PRICE", product.price)
-                putExtra("PRODUCT_IMG", product.img)
-                putExtra("PRODUCT_DESCRIPTION", product.description)
-                putExtra("PRODUCT_RATING", product.rating)
-            }
-            holder.itemView.context.startActivity(intent)
+            itemClickListener?.onItemClicked(product)
         }
+
+//        holder.itemView.setOnClickListener {
+//            val intent = Intent(holder.itemView.context, DetailProductActivity::class.java).apply {
+//                putExtra("PRODUCT_ID", product.id)
+//                putExtra("PRODUCT_NAME", product.name)
+//                putExtra("PRODUCT_SHOP", product.shop)
+//                putExtra("PRODUCT_CATEGORY", product.category)
+//                putExtra("PRODUCT_PRICE", product.price)
+//                putExtra("PRODUCT_IMG", product.img)
+//                putExtra("PRODUCT_DESCRIPTION", product.description)
+//                putExtra("PRODUCT_RATING", product.rating)
+//            }
+//            holder.itemView.context.startActivity(intent)
+//        }
     }
 
     override fun getItemCount(): Int {

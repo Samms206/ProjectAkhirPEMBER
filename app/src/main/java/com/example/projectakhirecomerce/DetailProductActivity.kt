@@ -6,14 +6,25 @@ import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.example.projectakhirecomerce.model.CartEntity
+import com.example.projectakhirecomerce.view.Cart.CartActivity
+import com.example.projectakhirecomerce.viewmodel.CartViewModel
+import com.example.projectakhirecomerce.viewmodel.CartViewModelFactory
 import com.google.android.material.imageview.ShapeableImageView
 
 class DetailProductActivity : AppCompatActivity() {
+    private var userId: Int = -1
+    private var userEmail: String = "Sams"
+
+    private lateinit var cartViewModel: CartViewModel
+
     private lateinit var decreaseButton: TextView
     private lateinit var increaseButton: TextView
     private lateinit var quantityText: TextView
@@ -36,6 +47,14 @@ class DetailProductActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val extras = intent.extras
+        userId = extras?.getInt("id", -1) ?: -1
+        userEmail = extras?.getString("email", "Sams") ?: "Sams"
+        //
+        val factory = CartViewModelFactory.getInstance(this) //ini
+        cartViewModel = ViewModelProvider(this, factory)[CartViewModel::class.java] //ini
+        //
+        val productId = intent.getStringExtra("PRODUCT_ID")
         val productName = intent.getStringExtra("PRODUCT_NAME")
         val productShop = intent.getStringExtra("PRODUCT_SHOP")
         val productCategory = intent.getStringExtra("PRODUCT_CATEGORY") ?: ""
@@ -50,6 +69,8 @@ class DetailProductActivity : AppCompatActivity() {
         val imgProduct: ShapeableImageView = findViewById(R.id.img_product_dtl)
         val txtDescription: TextView = findViewById(R.id.txt_desc_dtl)
 //        val txtRating: TextView = findViewById(R.id.txt_rating)
+        val btnAddToCart: LinearLayout = findViewById(R.id.btn_addToCart)
+
         sizeClothes = findViewById(R.id.size_clothes)
         sizeShoes = findViewById(R.id.size_shoes)
 
@@ -103,12 +124,45 @@ class DetailProductActivity : AppCompatActivity() {
                 updateQuantityAndPrice()
             }
         }
+
+        btnAddToCart.setOnClickListener{
+            val subTotal = quantity * pricePerItem
+            val newCart = CartEntity(
+                id = 0,
+                idUser = userId.toString(),
+                idProduct = productId.toString(),
+                nameProduct = productName.toString(),
+                shopProduct = productShop.toString(),
+                priceProduct = productPrice.toString(),
+                qtyProduct = quantity.toString(),
+                imgProduct = productImg.toString(),
+                subTotal = subTotal.toString()
+            )
+
+            if (newCart != null) cartViewModel.insertCart(newCart)
+
+            Toast.makeText(
+                this@DetailProductActivity,
+                "Data Success Added",
+                Toast.LENGTH_SHORT
+            ).show()
+
+            finish()
+
+            val intent = Intent(this, CartActivity::class.java).apply {
+                putExtra("id", userId)
+                putExtra("email", userEmail)
+            }
+            startActivity(intent)
+        }
     }
 
     fun gotoMain(view: View) {
-        Intent(this, MainActivity::class.java).also {
-            startActivity(it)
+        val intent = Intent(this, MainActivity::class.java).apply {
+            putExtra("id", userId)
+            putExtra("email", userEmail)
         }
+        startActivity(intent)
     }
 
     private fun updateQuantityAndPrice() {

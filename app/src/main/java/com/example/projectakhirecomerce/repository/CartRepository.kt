@@ -9,7 +9,7 @@ import com.example.projectakhirecomerce.utils.AppExecutors
 
 class CartRepository private constructor(private val cartDao: CartDao, private val appExecutors: AppExecutors) {
 
-    fun getAllCart(): LiveData<List<CartEntity>> = cartDao.getAllCart()
+    fun getCartByUserId(userId: String): LiveData<List<CartEntity>> = cartDao.getCartByUserId(userId)
 
     fun insertCart(cart: CartEntity) {
         appExecutors.diskIO().execute { cartDao.insertCart(cart) }

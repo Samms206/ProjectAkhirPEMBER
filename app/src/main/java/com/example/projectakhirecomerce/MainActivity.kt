@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectakhirecomerce.api.ApiResponse
+import com.example.projectakhirecomerce.model.Product
 import com.example.projectakhirecomerce.repository.ProductRepository
 import com.example.projectakhirecomerce.view.Auth.LoginActivity
 import com.example.projectakhirecomerce.view.Cart.CartActivity
@@ -58,13 +59,32 @@ class MainActivity : AppCompatActivity() {
         userEmail = extras?.getString("email", "Sams") ?: "Sams"
         txthai = findViewById(R.id.txt_hai)
         val nameOnly = userEmail.substringBefore("@")
-        txthai.text = "Hai " + nameOnly + " 👋"
+        txthai.text = "Hai $nameOnly 👋"
 
         //Show Product
         recyclerView = findViewById(R.id.rv_product)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         productAdapter = ProductAdapter(emptyList())
         recyclerView.adapter = productAdapter
+
+        // Set the click listener for the adapter
+        productAdapter.setOnItemClickListener(object : ProductAdapter.OnItemClickListener {
+            override fun onItemClicked(product: Product) {
+                val intent = Intent(this@MainActivity, DetailProductActivity::class.java).apply {
+                    putExtra("PRODUCT_ID", product.id)
+                    putExtra("PRODUCT_NAME", product.name)
+                    putExtra("PRODUCT_SHOP", product.shop)
+                    putExtra("PRODUCT_CATEGORY", product.category)
+                    putExtra("PRODUCT_PRICE", product.price)
+                    putExtra("PRODUCT_IMG", product.img)
+                    putExtra("PRODUCT_DESCRIPTION", product.description)
+                    putExtra("PRODUCT_RATING", product.rating)
+                    putExtra("id", userId)
+                    putExtra("email", userEmail)
+                }
+                startActivity(intent)
+            }
+        })
 
         val repository = ProductRepository()
         val factory = ProductViewModelFactory(repository)

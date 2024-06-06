@@ -11,9 +11,7 @@ class CartViewModel(private val cartRepository: CartRepository) : ViewModel() {
         cartRepository.insertCart(cart)
     }
 
-    fun getAllCart(): LiveData<List<CartEntity>> {
-        return cartRepository.getAllCart()
-    }
+    fun getCartByUserId(userId: String): LiveData<List<CartEntity>> = cartRepository.getCartByUserId(userId)
 
     fun deleteCart(cart: CartEntity) {
         cartRepository.deleteCart(cart)

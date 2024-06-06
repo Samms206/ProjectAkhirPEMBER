@@ -13,8 +13,8 @@ interface CartDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertCart(cartEntity: CartEntity)
 
-    @Query("SELECT * FROM cartentity ORDER BY id ASC")
-    fun getAllCart() : LiveData<List<CartEntity>>
+    @Query("SELECT * FROM cartentity WHERE idUser = :userId ORDER BY id ASC")
+    fun getCartByUserId(userId: String) : LiveData<List<CartEntity>>
 
     @Delete
     fun deleteCart(cartEntity: CartEntity)

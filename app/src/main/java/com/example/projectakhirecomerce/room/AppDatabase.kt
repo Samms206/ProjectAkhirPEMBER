@@ -10,7 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.projectakhirecomerce.model.CartEntity
 import com.example.projectakhirecomerce.model.UserEntity
 
-@Database(entities = [UserEntity::class, CartEntity::class], version = 3) //ganti versi tiap ada perubahan di database
+@Database(entities = [UserEntity::class, CartEntity::class], version = 4) //ganti versi tiap ada perubahan di database
 @TypeConverters(AppConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao

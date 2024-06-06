@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.projectakhirecomerce.MainActivity
 import com.example.projectakhirecomerce.R
+import com.example.projectakhirecomerce.model.CartEntity
 import com.example.projectakhirecomerce.view.ProductAdapter
 import com.example.projectakhirecomerce.viewmodel.CartViewModel
 import com.example.projectakhirecomerce.viewmodel.CartViewModelFactory
@@ -47,10 +48,16 @@ class CartActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.rv_cart)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        cartViewModel.getAllCart().observe(this) { cartData ->
+        cartViewModel.getCartByUserId(userId.toString()).observe(this) { cartData ->
             if (cartData != null) {
                 cartAdapter = CartAdapter(cartData) //ini
                 recyclerView.adapter = cartAdapter
+
+                cartAdapter.setOnItemClickCallback(object : CartAdapter.OnItemClickCallback{
+                    override fun onItemClicked(data: CartEntity) {
+                        cartViewModel.deleteCart(data)
+                    }
+                })
             }
         }
     }
