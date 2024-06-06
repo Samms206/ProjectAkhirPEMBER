@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.projectakhirecomerce.view.Auth.LoginActivity
 
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun gotoMain(){
-        Intent(this, MainActivity::class.java).also {
+        Intent(this, LoginActivity::class.java).also {
             startActivity(it)
             finish()
         }

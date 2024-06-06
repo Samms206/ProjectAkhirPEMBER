@@ -5,12 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.example.projectakhirecomerce.model.UserDatabase
+import com.example.projectakhirecomerce.model.CartEntity
+import com.example.projectakhirecomerce.model.UserEntity
 
-@Database(entities = [UserDatabase::class], version = 1)
+@Database(entities = [UserEntity::class, CartEntity::class], version = 2)
 @TypeConverters(AppConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
+    abstract fun cartDao(): CartDao
+
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null
@@ -22,6 +25,7 @@ abstract class AppDatabase : RoomDatabase() {
                         context.applicationContext,
                         AppDatabase::class.java, "app_database"
                     )
+                        .fallbackToDestructiveMigration() //ini ditambahkan jika memiliki leih dari 1 entitiy
                         .build()
                 }
             }

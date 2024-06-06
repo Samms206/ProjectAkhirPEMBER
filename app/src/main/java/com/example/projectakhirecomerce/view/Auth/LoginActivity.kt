@@ -2,6 +2,7 @@ package com.example.projectakhirecomerce.view.Auth
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -31,7 +32,9 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-        val repository = DependencyInjection.provideRepository(this)
+        showDataUser()
+
+        val repository = DependencyInjection.provideUserRepository(this)
         userViewModel = ViewModelProvider(this, UserViewModelFactory(repository))
             .get(UserViewModel::class.java)
 
@@ -62,6 +65,20 @@ class LoginActivity : AppCompatActivity() {
     fun gotoRegister(view: View) {
         Intent(this, RegisterActivity::class.java).also {
             startActivity(it)
+        }
+    }
+
+    fun showDataUser(){
+        //Menampilkan data di tabel user
+        val repository = DependencyInjection.provideUserRepository(this)
+        userViewModel = ViewModelProvider(this, UserViewModelFactory(repository))[UserViewModel::class.java]
+        userViewModel.getAllUser().observe(this) { userList ->
+            for (user in userList) {
+                Log.d(
+                    "DatabaseData",
+                    "ID: ${user.id}, Email: ${user.email}, Password: ${user.password}"
+                )
+            }
         }
     }
 }

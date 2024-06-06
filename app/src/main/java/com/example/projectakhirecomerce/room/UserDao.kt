@@ -5,16 +5,16 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.projectakhirecomerce.model.UserDatabase
+import com.example.projectakhirecomerce.model.UserEntity
 
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertUser(postDatabase: UserDatabase)
+    fun insertUser(user: UserEntity)
 
-    @Query("SELECT * FROM userdatabase ORDER BY id ASC")
-    fun getAllUser() : LiveData<List<UserDatabase>>
+    @Query("SELECT * FROM userentity ORDER BY id ASC")
+    fun getAllUser() : LiveData<List<UserEntity>>
 
-    @Query("SELECT * FROM userdatabase WHERE email = :email LIMIT 1")
-    fun getUserByEmail(email: String): UserDatabase?
+    @Query("SELECT * FROM userentity WHERE email = :email LIMIT 1")
+    fun getUserByEmail(email: String): UserEntity?
 }

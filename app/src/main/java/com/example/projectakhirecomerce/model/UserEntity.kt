@@ -5,10 +5,9 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.io.File
 
 @Entity
-data class UserDatabase(
+data class UserEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     val id: Int = 0,
@@ -35,12 +34,12 @@ data class UserDatabase(
     override fun describeContents(): Int {
         return 0
     }
-    companion object CREATOR : Parcelable.Creator<UserDatabase> {
-        override fun createFromParcel(parcel: Parcel): UserDatabase {
-            return UserDatabase(parcel)
+    companion object CREATOR : Parcelable.Creator<UserEntity> {
+        override fun createFromParcel(parcel: Parcel): UserEntity {
+            return UserEntity(parcel)
         }
 
-        override fun newArray(size: Int): Array<UserDatabase?> {
+        override fun newArray(size: Int): Array<UserEntity?> {
             return arrayOfNulls(size)
         }
     }

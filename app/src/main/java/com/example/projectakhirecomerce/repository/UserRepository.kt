@@ -1,19 +1,19 @@
 package com.example.projectakhirecomerce.repository
 
 import androidx.lifecycle.LiveData
-import com.example.projectakhirecomerce.model.UserDatabase
+import com.example.projectakhirecomerce.model.UserEntity
 import com.example.projectakhirecomerce.room.UserDao
 import com.example.projectakhirecomerce.utils.AppExecutors
 
 class UserRepository private constructor(private val userDao: UserDao, private val appExecutors: AppExecutors) {
 
-    fun getAllPost(): LiveData<List<UserDatabase>> = userDao.getAllUser()
+    fun getAllUser(): LiveData<List<UserEntity>> = userDao.getAllUser()
 
-    fun insertPost(user: UserDatabase) {
+    fun insertUser(user: UserEntity) {
         appExecutors.diskIO().execute { userDao.insertUser(user) }
     }
 
-    fun login(email: String, password: String, callback: (UserDatabase?) -> Unit) {
+    fun login(email: String, password: String, callback: (UserEntity?) -> Unit) {
         appExecutors.diskIO().execute {
             val user = userDao.getUserByEmail(email)
             appExecutors.mainThread().execute {
