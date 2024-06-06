@@ -99,9 +99,11 @@ class MainActivity : AppCompatActivity() {
         homeIcon.setOnClickListener { setActiveIcon(homeIcon) }
         cartIcon.setOnClickListener {
             setActiveIcon(cartIcon)
-            Intent(this, CartActivity::class.java).also {
-                startActivity(it)
+            val intent = Intent(this, CartActivity::class.java).apply {
+                putExtra("id", userId)
+                putExtra("email", userEmail)
             }
+            startActivity(intent)
         }
         notificationIcon.setOnClickListener { setActiveIcon(notificationIcon) }
         profileIcon.setOnClickListener {

@@ -20,6 +20,9 @@ import com.example.projectakhirecomerce.viewmodel.ProductViewModel
 
 class CartActivity : AppCompatActivity() {
 
+    private var userId: Int = -1
+    private var userEmail: String = "Sams"
+
     private lateinit var cartViewModel: CartViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var cartAdapter: CartAdapter
@@ -34,6 +37,10 @@ class CartActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        //INTENT DATA
+        val extras = intent.extras
+        userId = extras?.getInt("id", -1) ?: -1
+        userEmail = extras?.getString("email", "Sams") ?: "Sams"
 
         val factory = CartViewModelFactory.getInstance(this)
         cartViewModel = ViewModelProvider(this, factory)[CartViewModel::class.java]
@@ -49,8 +56,10 @@ class CartActivity : AppCompatActivity() {
     }
 
     fun gotoMain(view: View) {
-        Intent(this, MainActivity::class.java).also {
-            startActivity(it)
+        val intent = Intent(this, MainActivity::class.java).apply {
+            putExtra("id", userId)
+            putExtra("email", userEmail)
         }
+        startActivity(intent)
     }
 }
