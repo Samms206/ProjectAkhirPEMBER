@@ -22,6 +22,7 @@ import com.example.projectakhirecomerce.repository.ProductRepository
 import com.example.projectakhirecomerce.view.Auth.LoginActivity
 import com.example.projectakhirecomerce.view.Cart.CartActivity
 import com.example.projectakhirecomerce.view.ProductAdapter
+import com.example.projectakhirecomerce.view.Profile.ProfileActivity
 import com.example.projectakhirecomerce.viewmodel.ProductViewModel
 import com.example.projectakhirecomerce.viewmodel.ProductViewModelFactory
 import org.w3c.dom.Text
@@ -128,9 +129,11 @@ class MainActivity : AppCompatActivity() {
         notificationIcon.setOnClickListener { setActiveIcon(notificationIcon) }
         profileIcon.setOnClickListener {
             setActiveIcon(profileIcon)
-            Intent(this, LoginActivity::class.java).also {
-                startActivity(it)
+            val intent = Intent(this, ProfileActivity::class.java).apply {
+                putExtra("id", userId)
+                putExtra("email", userEmail)
             }
+            startActivity(intent)
         }
 
         // Set click listeners

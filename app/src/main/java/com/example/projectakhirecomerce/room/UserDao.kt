@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.example.projectakhirecomerce.model.UserEntity
 
 @Dao
@@ -17,4 +18,7 @@ interface UserDao {
 
     @Query("SELECT * FROM userentity WHERE email = :email LIMIT 1")
     fun getUserByEmail(email: String): UserEntity?
+
+    @Update
+    fun updateUser(user: UserEntity)
 }

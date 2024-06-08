@@ -18,4 +18,8 @@ class UserViewModel(private val userRepository: UserRepository) : ViewModel() {
     fun login(email: String, password: String, callback: (UserEntity?) -> Unit) {
         userRepository.login(email, password, callback)
     }
+
+    fun updateUser(user: UserEntity) {
+        userRepository.updateUser(user)
+    }
 }

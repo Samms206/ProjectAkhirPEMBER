@@ -26,6 +26,10 @@ class UserRepository private constructor(private val userDao: UserDao, private v
         }
     }
 
+    fun updateUser(user: UserEntity) {
+        appExecutors.diskIO().execute { userDao.updateUser(user) }
+    }
+
     companion object {
         @Volatile
         private var instance: UserRepository? = null
