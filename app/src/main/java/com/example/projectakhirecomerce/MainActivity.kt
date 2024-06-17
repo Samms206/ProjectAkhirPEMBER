@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.GridLayout
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -38,6 +39,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var productAdapter: ProductAdapter
     //
+    private lateinit var progressBar: ProgressBar
+
     private lateinit var homeIcon: ImageView
     private lateinit var cartIcon: ImageView
     private lateinit var notificationIcon: ImageView
@@ -61,6 +64,8 @@ class MainActivity : AppCompatActivity() {
         txthai = findViewById(R.id.txt_hai)
         val nameOnly = userEmail.substringBefore("@")
         txthai.text = "Hai $nameOnly 👋"
+
+        progressBar = findViewById(R.id.progress_bar)
 
         //Show Product
         recyclerView = findViewById(R.id.rv_product)
@@ -95,12 +100,14 @@ class MainActivity : AppCompatActivity() {
             when (response) {
                 is ApiResponse.Success -> {
                     productAdapter.setProductList(response.data)
+                    progressBar.visibility = View.GONE
                 }
                 is ApiResponse.Error -> {
                     val errorMessage = response.message
+                    progressBar.visibility = View.GONE
                 }
                 is ApiResponse.Loading -> {
-                    // Show loading indicator
+                    progressBar.visibility = View.VISIBLE
                 }
             }
         }
