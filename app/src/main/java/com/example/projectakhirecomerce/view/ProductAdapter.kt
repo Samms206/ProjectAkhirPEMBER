@@ -16,6 +16,7 @@ import com.google.android.material.imageview.ShapeableImageView
 class ProductAdapter(private var productList: List<Product>) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     private var itemClickListener: OnItemClickListener? = null
+    private var stateFav = false
 
     interface OnItemClickListener {
         fun onItemClicked(product: Product)
@@ -35,6 +36,7 @@ class ProductAdapter(private var productList: List<Product>) : RecyclerView.Adap
         val productShop: TextView = itemView.findViewById(R.id.txt_shop)
         val productPrice: TextView = itemView.findViewById(R.id.txt_price)
         val productImg: ShapeableImageView = itemView.findViewById(R.id.img_product)
+        val iconLove: ShapeableImageView = itemView.findViewById(R.id.icon_love)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -55,19 +57,11 @@ class ProductAdapter(private var productList: List<Product>) : RecyclerView.Adap
             itemClickListener?.onItemClicked(product)
         }
 
-//        holder.itemView.setOnClickListener {
-//            val intent = Intent(holder.itemView.context, DetailProductActivity::class.java).apply {
-//                putExtra("PRODUCT_ID", product.id)
-//                putExtra("PRODUCT_NAME", product.name)
-//                putExtra("PRODUCT_SHOP", product.shop)
-//                putExtra("PRODUCT_CATEGORY", product.category)
-//                putExtra("PRODUCT_PRICE", product.price)
-//                putExtra("PRODUCT_IMG", product.img)
-//                putExtra("PRODUCT_DESCRIPTION", product.description)
-//                putExtra("PRODUCT_RATING", product.rating)
-//            }
-//            holder.itemView.context.startActivity(intent)
-//        }
+        holder.iconLove.setOnClickListener {
+            stateFav = !stateFav
+            holder.iconLove.setImageResource(if (stateFav) R.drawable.loveactive else R.drawable.love)
+        }
+
     }
 
     override fun getItemCount(): Int {
