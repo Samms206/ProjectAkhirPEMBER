@@ -2,6 +2,8 @@ package com.example.projectakhirecomerce
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
@@ -9,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
@@ -18,6 +21,7 @@ import com.example.projectakhirecomerce.view.Cart.CartActivity
 import com.example.projectakhirecomerce.viewmodel.CartViewModel
 import com.example.projectakhirecomerce.viewmodel.CartViewModelFactory
 import com.google.android.material.imageview.ShapeableImageView
+import java.io.File
 
 class DetailProductActivity : AppCompatActivity() {
     private var userId: Int = -1
@@ -31,6 +35,7 @@ class DetailProductActivity : AppCompatActivity() {
     private lateinit var totalPriceText: TextView
     private lateinit var sizeClothes: LinearLayout
     private lateinit var sizeShoes: LinearLayout
+    private lateinit var btnShare: ShapeableImageView
 
     private var quantity = 1
     private var pricePerItem = 0.0
@@ -70,6 +75,7 @@ class DetailProductActivity : AppCompatActivity() {
         val txtDescription: TextView = findViewById(R.id.txt_desc_dtl)
 //        val txtRating: TextView = findViewById(R.id.txt_rating)
         val btnAddToCart: LinearLayout = findViewById(R.id.btn_addToCart)
+        val btnShare:ShapeableImageView = findViewById(R.id.btn_share)
 
         sizeClothes = findViewById(R.id.size_clothes)
         sizeShoes = findViewById(R.id.size_shoes)
@@ -154,6 +160,32 @@ class DetailProductActivity : AppCompatActivity() {
                 putExtra("email", userEmail)
             }
             startActivity(intent)
+        }
+
+        btnShare.setOnClickListener {
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, "Product: $productName")
+                putExtra(Intent.EXTRA_TEXT, "Price: $productPrice")
+                putExtra(Intent.EXTRA_TEXT, "Link Product: $productImg")
+                type = "text/plain"
+            }
+            val whatsappInstalled = isPackageInstalled("com.whatsapp") || isPackageInstalled("com.whatsapp.w4b")
+            if (whatsappInstalled) {
+                sendIntent.setPackage("com.whatsapp")
+                startActivity(sendIntent)
+            } else {
+                Toast.makeText(this, "WhatsApp tidak terinstal.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun isPackageInstalled(packageName: String): Boolean {
+        return try {
+            packageManager.getPackageInfo(packageName, 0)
+            true
+        } catch (e: PackageManager.NameNotFoundException) {
+            false
         }
     }
 
