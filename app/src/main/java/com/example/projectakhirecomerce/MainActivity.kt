@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.GridLayout
 import android.widget.ImageView
@@ -66,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         txthai = findViewById(R.id.txt_hai)
         val nameOnly = userEmail.substringBefore("@")
         txthai.text = "Hai $nameOnly 👋"
+        Log.d("Intent PutExtra-Main","$userId | $userEmail | $userPass")
 
         progressBar = findViewById(R.id.progress_bar)
 
@@ -134,6 +136,7 @@ class MainActivity : AppCompatActivity() {
                 putExtra("email", userEmail)
                 putExtra("password", userPass)
             }
+            Log.d("Intent PutExtra-Cart","$userId | $userEmail | $userPass")
             startActivity(intent)
         }
         notificationIcon.setOnClickListener { setActiveIcon(notificationIcon) }
@@ -144,6 +147,7 @@ class MainActivity : AppCompatActivity() {
                 putExtra("email", userEmail)
                 putExtra("password", userPass)
             }
+            Log.d("Intent PutExtra-Profile","$userId | $userEmail | $userPass")
             startActivity(intent)
         }
 

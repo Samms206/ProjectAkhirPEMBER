@@ -44,13 +44,13 @@ class ProfileActivity : AppCompatActivity() {
         val emailEditText = findViewById<EditText>(R.id.tf_username_pr)
         val passwordEditText = findViewById<EditText>(R.id.tf_password_pr)
 
-        emailEditText.setText(userEmail)
-        passwordEditText.setText(userPass)
-
         val extras = intent.extras
         userId = extras?.getInt("id", -1) ?: -1
         userEmail = extras?.getString("email", "Sams") ?: "Sams"
         userPass = extras?.getString("password", "123") ?: "123"
+
+        emailEditText.setText(userEmail)
+        passwordEditText.setText(userPass)
 
         val repository = DependencyInjection.provideUserRepository(this)
         userViewModel = ViewModelProvider(this, UserViewModelFactory(repository))
